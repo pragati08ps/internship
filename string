@@ -1,0 +1,42 @@
+str1 = "Hello"
+str2 = 'World'
+print(str1[0])
+print(str1[-1])
+print(str1[0:5])
+print(str1[:5])
+print(str1[7:])
+print(str1[-6:])
+print(len(str1))
+result = str1 + " " + str2
+print(result)
+result = str1 * 3
+print(result)
+print(str1.upper())
+print(str1.lower())
+print(str1.capitalize())
+print(str1.title())
+print(str1.strip())
+print(str1.replace("World", "Python"))
+print(str1.find("World"))
+print(str1.count("o"))
+print(str1.split())
+name = "Alice"
+age = 30
+print(f"Name: {name}, Age: {age}")
+print("Name: {}, Age: {}".format(name, age))
+print("Name: %s, Age: %d" % (name, age))
+print("Hello" in str1)
+print("Python" in str1)
+num = 123
+str_num = str(num)
+print(str_num)
+words = ["Hello", "World", "Python"]
+sentence = " ".join(words)
+print(sentence)
+result = str1.partition(",")
+print(result)
+print(str1.isalpha())
+print(str2.isdigit())
+print("   ".isspace())
+print(str1.isupper())
+print(str2.islower())
