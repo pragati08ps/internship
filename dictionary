@@ -1,58 +1,41 @@
-empty_tuple = ()
-print("Empty Tuple:", empty_tuple)
-tuple1 = (1, 2, 3, 4)
-print("Tuple with elements:", tuple1)
-single_element_tuple = (1,)
-print("Single element tuple:", single_element_tuple)
-packed_tuple = 1, 2, 3, 4
-print("Packed tuple:", packed_tuple)
-print("First element:", tuple1[0])
-print("Last element using negative index:", tuple1[-1])
-print("Slice (1:3):", tuple1[1:3])
-print("Slice (:2):", tuple1[:2])
-print("Slice (2:):", tuple1[2:])
-print("Slice (-2:):", tuple1[-2:])
-tuple2 = (5, 6)
-print("Concatenated Tuple:", tuple1 + tuple2)
-print("Repeated Tuple:", tuple2 * 3)
-print("Is 3 in tuple1?", 3 in tuple1)
-print("Is 5 not in tuple1?", 5 not in tuple1)
-tuple3 = tuple1
-print("tuple1 is tuple3:", tuple1 is tuple3)
-print("tuple1 is not tuple3:", tuple1 is not tuple3)
-print("Length of tuple1:", len(tuple1))
-print("Index of 3 in tuple1:", tuple1.index(3))
-tuple4 = (1, 2, 3, 2)
-print("Count of 2 in tuple4:", tuple4.count(2))
-a, b, c, d = tuple1
-print("Unpacking tuple1:", a, b, c, d)
-a, *rest, d = tuple1
-print("Extended unpacking:", a, rest, d)
-print("Count of 3 in tuple1:", tuple1.count(3))
-print("Index of 2 in tuple1:", tuple1.index(2))
-nested_tuple = ((1, 2), (3, 4), (5, 6))
-print("Nested tuple:", nested_tuple)
-print("Accessing nested element:", nested_tuple[0])
-print("Accessing element inside nested tuple:", nested_tuple[0][1])
-try:
-    tuple1[1] = 100
-except TypeError as e:
-    print("Error:", e)
-my_dict = { (1, 2): "value" }
-print("Dictionary with tuple as key:", my_dict)
-print("Value for key (1, 2):", my_dict[(1, 2)])
-def func(*args):
-    print("Function received tuple:", args)
-func(1, 2, 3)
-def func2(a, b, c):
-    print("Function received unpacked arguments:", a, b, c)
-args = (1, 2, 3)
-func2(*args)
-tuple5 = (1, 2, 3)
-tuple6 = (1, 2, 4)
-print("Is tuple5 < tuple6?", tuple5 < tuple6)
-print("\nSummary of operations:")
-print("Concatenation of tuple1 and tuple2:", tuple1 + tuple2)
-print("Repetition of tuple2:", tuple2 * 2)
-print("Is 3 in tuple1?", 3 in tuple1)
-print("Unpacking tuple1 results in:", a, b, c, d)
+my_dict = {'name': 'Alice', 'age': 25, 'city': 'New York'}
+print(f"Name: {my_dict['name']}")
+print(f"Age: {my_dict['age']}")
+city = my_dict.get('city')
+country = my_dict.get('country')
+country_default = my_dict.get('country', 'USA')
+print(f"City: {city}")
+print(f"Country (default): {country_default}")
+my_dict['age'] = 30
+my_dict['country'] = 'USA'
+print("Updated Dictionary:", my_dict)
+del my_dict['age']
+country = my_dict.pop('country')
+print(f"Removed country: {country}")
+key, value = my_dict.popitem()
+print(f"Removed item: {key}: {value}")
+if 'name' in my_dict:
+    print("Name exists in the dictionary.")
+print("\nKeys in dictionary:")
+for key in my_dict:
+    print(key)
+print("\nValues in dictionary:")
+for value in my_dict.values():
+    print(value)
+print("\nKey-Value pairs in dictionary:")
+for key, value in my_dict.items():
+    print(f"{key}: {value}")
+new_dict = my_dict.copy()
+another_dict = dict(my_dict)
+print("\nCopied Dictionary:", new_dict)
+my_dict.update({'gender': 'female'})
+new_dict = my_dict | {'location': 'NYC'}
+print("\nMerged Dictionary:", new_dict)
+length = len(my_dict)
+print(f"\nLength of my_dict: {length}")
+my_dict.clear()
+print("\nDictionary after clearing:", my_dict)
+nested_dict = {'person': {'name': 'Alice', 'age': 25}, 'location': 'New York'}
+print("\nNested Dictionary:", nested_dict)
+print(f"Nested Name: {nested_dict['person']['name']}")
+
