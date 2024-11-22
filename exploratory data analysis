@@ -1,0 +1,50 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.express as px
+
+df = pd.read_csv('walmart.csv')
+print(df.info())
+print(df.head())
+print(df.describe())
+print(df.isnull().sum())
+print(df.dtypes)
+df.hist(bins=30, figsize=(15, 10))
+plt.suptitle('Histogram of Numerical Columns')
+plt.show()
+categorical_columns = df.select_dtypes(include=['object']).columns
+for col in categorical_columns:
+    plt.figure(figsize=(8, 6))
+    sns.countplot(data=df, x=col)
+    plt.title(f'Countplot of {col}')
+    plt.xticks(rotation=45)
+    plt.show()
+# Select only numerical features for correlation calculation
+numerical_df = df.select_dtypes(include=['float64', 'int64'])
+plt.figure(figsize=(12, 8))
+sns.heatmap(numerical_df.corr(), annot=True, cmap='coolwarm', fmt='.2f', linewidths=0.5)
+plt.title('Correlation Heatmap')
+plt.show()
+sns.pairplot(df.select_dtypes(include=['float64', 'int64']))
+plt.suptitle('Pairplot of Numerical Columns', y=1.02)
+plt.show()
+numerical_columns = df.select_dtypes(include=['float64', 'int64']).columns
+for col in numerical_columns:
+    plt.figure(figsize=(8, 6))
+    sns.boxplot(data=df, x=col)
+    plt.title(f'Boxplot of {col}')
+    plt.show()
+# Replace 'column_1', 'column_2', 'column_3' with actual column names
+sns.pairplot(df, vars=['column_1', 'column_2', 'column_3'], kind='scatter') # Please replace 'column_1', 'column_2', 'column_3' with the actual numerical features from your dataset
+plt.suptitle('Feature Relationships')
+plt.show()
+# Replace 'column_name' with an actual numerical column name
+fig = px.histogram(df, x='column_name') # Please replace 'column_name' with the actual numerical feature from your dataset
+fig.update_layout(title="Interactive Histogram")
+fig.show()
+for col in categorical_columns:
+    print(f"\nUnique values in {col}:")
+    print(df[col].unique())
+print(df.duplicated().sum())
+df.describe().to_csv('summary_statistics.csv')
