@@ -1,0 +1,36 @@
+import json
+import numpy as np
+from PIL import Image, ImageDraw
+import matplotlib.pyplot as plt
+
+DATASET_DIR = r'/content/drive/MyDrive/cat/'
+
+examples = [
+    Image.open(DATASET_DIR + '00000-2655692275.png'),
+    Image.open(DATASET_DIR + '00000-3984659586.png'),
+    Image.open(DATASET_DIR + '00001-2655692276.png')
+]
+examplesSeg = ['01083-436654396.png', '01081-436654394.png', '01082-436654395.png']
+
+fig = plt.figure(figsize=(10, 14))
+
+for i in range(0, len(examples)):
+    a = fig.add_subplot(1, 3, i+1)
+    imgplot = plt.imshow(examples[i])
+    a.set_title('Example ' + str(i))
+
+with open('/content/sample_data/anscombe.json') as json_file:
+    data = json.load(json_file)
+    for i in range(0, len(examplesSeg)):
+        if examplesSeg[i] in data:
+            coord = list(zip(
+                data[examplesSeg[i]]['regions'][0]['shape_attributes']['all_points_x'],
+                data[examplesSeg[i]]['regions'][0]['shape_attributes']['all_points_y']
+            ))
+            img_size = examples[i].size
+            Image_seg = Image.new("RGB", img_size)
+            draw = ImageDraw.Draw(Image_seg)
+            draw.polygon(coord, fill=200)
+            a = fig.add_subplot(2, 3, 3+i+1)
+            imgplot = plt.imshow(Image_seg)
+            a.set_title('Segment for example ' + str(i))
