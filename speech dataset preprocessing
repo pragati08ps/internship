@@ -1,0 +1,68 @@
+import os
+import librosa
+import numpy as np
+import pandas as pd
+from tqdm import tqdm
+
+def preprocess_audio_dataset(dataset_path, output_path, sample_rate=22050, duration=3, n_mfcc=13):
+    """
+    Preprocess a voice dataset by extracting MFCC features and saving them along with labels.
+
+    Parameters:
+    - dataset_path: str, path to the dataset (organized in folders by label).
+    - output_path: str, path to save preprocessed features and labels.
+    - sample_rate: int, target sampling rate for audio files.
+    - duration: float, target duration for each audio file in seconds.
+    - n_mfcc: int, number of MFCC features to extract.
+    """
+    data = []
+    labels = []
+    classes = sorted(os.listdir(dataset_path))  # Assuming folder names are labels
+    num_samples = int(sample_rate * duration)
+    
+    for label in tqdm(classes, desc="Processing classes"):
+        class_path = os.path.join(dataset_path, label)
+        if not os.path.isdir(class_path):
+            continue
+        
+        for file in os.listdir(class_path):
+            if not file.endswith('.wav'):
+                continue
+            
+            file_path = os.path.join(class_path, file)
+            try:
+                # Load audio file
+                audio, sr = librosa.load(file_path, sr=sample_rate, duration=duration)
+                
+                # Ensure consistent length
+                if len(audio) < num_samples:
+                    audio = np.pad(audio, (0, num_samples - len(audio)))
+                elif len(audio) > num_samples:
+                    audio = audio[:num_samples]
+                
+                # Extract MFCC features
+                mfcc = librosa.feature.mfcc(y=audio, sr=sr, n_mfcc=n_mfcc)
+                mfcc_mean = np.mean(mfcc.T, axis=0)  # Mean of each coefficient
+                
+                # Append data and label
+                data.append(mfcc_mean)
+                labels.append(label)
+            
+            except Exception as e:
+                print(f"Error processing {file_path}: {e}")
+    
+    # Convert to numpy arrays
+    X = np.array(data)
+    y = np.array(labels)
+    
+    # Save preprocessed data
+    os.makedirs(output_path, exist_ok=True)
+    np.save(os.path.join(output_path, 'X.npy'), X)
+    np.save(os.path.join(output_path, 'y.npy'), y)
+    
+    print(f"Preprocessing complete. Features saved to {output_path}")
+
+# Example usage
+dataset_path = "path_to_dataset"  # Replace with your dataset path
+output_path = "path_to_save_features"  # Replace with the desired output directory
+preprocess_audio_dataset(dataset_path, output_path)
