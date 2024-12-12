@@ -1,0 +1,51 @@
+sns.set(rc={'figure.figsize':(12,8)})
+sns.set_style('darkgrid')
+sns.histplot(Emotion_labels, color='#4FAEB0')
+import os
+import librosa
+import numpy as np
+import soundfile as sf
+def preprocess_audio(file_path, target_sr=16000, desired_length=5):
+    """
+    Preprocess a single audio file.
+    Args:
+        file_path (str): Path to the audio file.
+        target_sr (int): Target sample rate for resampling.
+        desired_length (float): Desired length in seconds.
+    Returns:
+        np.ndarray: Preprocessed audio data.
+    """
+    # Load the audio file
+    audio, sample_rate = librosa.load(file_path, sr=None)
+    
+    # Resample to target sample rate
+    if sample_rate != target_sr:
+        audio = librosa.resample(audio, orig_sr=sample_rate, target_sr=target_sr)
+    
+    # Normalize audio
+    audio = audio / np.max(np.abs(audio))
+    
+    # Trim silence
+    audio, _ = librosa.effects.trim(audio)
+    
+    # Pad or crop to desired length
+    max_length = int(target_sr * desired_length)
+    if len(audio) < max_length:
+        audio = np.pad(audio, (0, max_length - len(audio)))
+    else:
+        audio = audio[:max_length]
+    
+    return audio
+input_dir = '/content/drive/MyDrive/Crema'
+output_dir = '/content/drive/MyDrive/Crema_Processed'
+os.makedirs(output_dir, exist_ok=True)
+
+# Preprocess all audio files
+for filename in os.listdir(input_dir):
+    if filename.endswith(".wav"):  # Adjust file extension as needed
+        file_path = os.path.join(input_dir, filename)
+        processed_audio = preprocess_audio(file_path)
+        
+        # Save the processed audio
+        output_path = os.path.join(output_dir, filename)
+        sf.write(output_path, processed_audio, samplerate=16000)
